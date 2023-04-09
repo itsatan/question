@@ -1,0 +1,6 @@
+{
+    // 编辑器保存触发eslint
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+}
