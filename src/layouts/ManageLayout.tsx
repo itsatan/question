@@ -33,7 +33,7 @@ const ManageLayout: React.FC = () => {
 						icon={<StarOutlined />}
 						onClick={() => navigate(path.start)}
 					>
-						星标问卷
+						标星问卷
 					</Button>
 					<Button
 						type={pathname.startsWith(path.trash) ? 'default' : 'text'}
