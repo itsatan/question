@@ -4,6 +4,7 @@ import { Button, Empty, Modal, Space, Table, Tag, Typography, message } from 'an
 import type { ColumnsType } from 'antd/es/table'
 import styles from './common.module.scss'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
+import ListSearch from '../../components/ListSearch'
 
 const { Title } = Typography
 
@@ -116,7 +117,9 @@ const Trash: React.FC = () => {
 				<div className={styles.left}>
 					<Title level={3}>回收站</Title>
 				</div>
-				<div className={styles.right}>(搜索)</div>
+				<div className={styles.right}>
+					<ListSearch />
+				</div>
 			</div>
 			<div className={styles.content}>
 				{questionList.length === 0 && <Empty description="什么都没有哦" />}
