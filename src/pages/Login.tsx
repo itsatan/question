@@ -64,10 +64,18 @@ const Login: React.FC = () => {
 				initialValues={{ remember: true }}
 				form={form}
 			>
-				<Form.Item label="用户名" name="username">
+				<Form.Item
+					label="用户名"
+					name="username"
+					rules={[
+						{ required: true, message: '请输入用户名' },
+						{ type: 'string', min: 5, max: 20, message: '字符长度在 5 - 20 之间' },
+						{ pattern: /^\w+$/, message: '只能输入字母数字下划线' },
+					]}
+				>
 					<Input placeholder="请输入用户名" />
 				</Form.Item>
-				<Form.Item label="密码" name="password">
+				<Form.Item label="密码" name="password" rules={[{ required: true, message: '请输入密码' }]}>
 					<Input.Password placeholder="请输入密码" />
 				</Form.Item>
 				<Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6, span: 16 }}>
