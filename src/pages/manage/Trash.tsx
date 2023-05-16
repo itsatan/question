@@ -6,6 +6,7 @@ import styles from './common.module.scss'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import ListPage from '../../components/ListPage'
 
 const { Title } = Typography
 
@@ -103,6 +104,9 @@ const Trash: React.FC = () => {
 				)}
 				{!loading && list.length === 0 && <Empty description="什么都没有哦" />}
 				{list.length > 0 && TableElem}
+			</div>
+			<div className={styles.footer}>
+				<ListPage total={total} />
 			</div>
 		</>
 	)
