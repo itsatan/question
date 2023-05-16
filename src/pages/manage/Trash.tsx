@@ -1,39 +1,13 @@
 import { useTitle } from 'ahooks'
 import React, { useState } from 'react'
-import { Button, Empty, Modal, Space, Table, Tag, Typography, message } from 'antd'
+import { Button, Empty, Modal, Space, Spin, Table, Tag, Typography, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import styles from './common.module.scss'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 
 const { Title } = Typography
-
-const rawQuestionList = [
-	{
-		_id: 5,
-		title: '问卷5',
-		isPublished: true,
-		isStar: false,
-		answerCount: 5,
-		createdAt: '3月10日 13:23',
-	},
-	{
-		_id: 6,
-		title: '问卷6',
-		isPublished: true,
-		isStar: false,
-		answerCount: 0,
-		createdAt: '3月11日 17:23',
-	},
-	{
-		_id: 7,
-		title: '问卷7',
-		isPublished: false,
-		isStar: true,
-		answerCount: 15,
-		createdAt: '3月12日 21:23',
-	},
-]
 
 interface DataType {
 	_id: number
@@ -72,9 +46,9 @@ const columns: ColumnsType<DataType> = [
 
 const Trash: React.FC = () => {
 	useTitle('小慕问卷 - 回收站')
-	const [questionList, setQuestionList] = useState(rawQuestionList)
 	const [selectedIds, setSelectedIds] = useState<React.Key[]>([])
-
+	const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true })
+	const { list = [], total = 0 } = data as any
 	const delQuestion = () => {
 		Modal.confirm({
 			title: '确认删除该问卷？',
@@ -100,7 +74,7 @@ const Trash: React.FC = () => {
 			</Space>
 			<Table
 				columns={columns}
-				dataSource={questionList}
+				dataSource={list}
 				pagination={false}
 				rowKey={q => q._id}
 				rowSelection={{
@@ -122,8 +96,13 @@ const Trash: React.FC = () => {
 				</div>
 			</div>
 			<div className={styles.content}>
-				{questionList.length === 0 && <Empty description="什么都没有哦" />}
-				{questionList.length > 0 && TableElem}
+				{loading && (
+					<div style={{ textAlign: 'center' }}>
+						<Spin />
+					</div>
+				)}
+				{!loading && list.length === 0 && <Empty description="什么都没有哦" />}
+				{list.length > 0 && TableElem}
 			</div>
 		</>
 	)

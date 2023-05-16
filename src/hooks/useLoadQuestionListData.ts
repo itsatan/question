@@ -3,12 +3,18 @@ import { getQuestionListService } from '../services/question'
 import { useSearchParams } from 'react-router-dom'
 import { LIST_SEARCH_PARAMS_KEY } from '../constants'
 
-const useLoadQuestionListData = () => {
+type OptionType = {
+	isStar: boolean
+	isDeleted: boolean
+}
+
+const useLoadQuestionListData = (opt: Partial<OptionType> = {}) => {
+	const { isStar, isDeleted } = opt
 	const [searchParams] = useSearchParams()
 	const { loading, data, error } = useRequest(
 		async () => {
 			const keyword = searchParams.get(LIST_SEARCH_PARAMS_KEY) || ''
-			const data = await getQuestionListService({ keyword })
+			const data = await getQuestionListService({ keyword, isStar, isDeleted })
 			return data
 		},
 		{

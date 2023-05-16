@@ -10,7 +10,8 @@ const { Title } = Typography
 
 const List: React.FC = () => {
 	useTitle('小慕问卷 - 我的问卷')
-	const { data, loading } = useLoadQuestionListData()
+	const { data = {}, loading } = useLoadQuestionListData()
+	const { list = [], total = 0 } = data as any
 	return (
 		<>
 			<div className={styles.header}>
@@ -28,8 +29,8 @@ const List: React.FC = () => {
 					</div>
 				)}
 				{!loading &&
-					(data as any)?.list.length > 0 &&
-					(data as any)?.list.map((question: any) => {
+					list?.length > 0 &&
+					list?.map((question: any) => {
 						const { _id } = question
 						return <QuestionCard key={_id} {...question} />
 					})}
