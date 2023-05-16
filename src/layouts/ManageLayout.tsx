@@ -1,8 +1,10 @@
 import React from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Button, Space, Divider } from 'antd'
+import { Button, Space, Divider, message } from 'antd'
 import { PlusOutlined, BarsOutlined, StarOutlined, DeleteOutlined } from '@ant-design/icons'
 import styles from './ManageLayout.module.scss'
+import { createQuestionService } from '../services/question'
+import { useRequest } from 'ahooks'
 
 const path = {
 	list: '/manage/list',
@@ -13,11 +15,24 @@ const path = {
 const ManageLayout: React.FC = () => {
 	const navigate = useNavigate()
 	const { pathname } = useLocation()
+	const { loading, run: handleCreateClick } = useRequest(createQuestionService, {
+		manual: true,
+		onSuccess: response => {
+			const { id } = response as any
+			navigate(`/question/edit/${id}`)
+			message.success('创建成功')
+		},
+	})
 	return (
 		<div className={styles.container}>
 			<div className={styles.left}>
 				<Space direction="vertical">
-					<Button type="primary" icon={<PlusOutlined />}>
+					<Button
+						type="primary"
+						icon={<PlusOutlined />}
+						onClick={handleCreateClick}
+						disabled={loading}
+					>
 						创建问卷
 					</Button>
 					<Divider style={{ borderTop: 'transparent' }} />
