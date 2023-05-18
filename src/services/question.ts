@@ -31,3 +31,13 @@ export const createQuestionService = async (): Promise<ResponseType> => {
 	const data = (await axios.post(url)) as ResponseType
 	return data
 }
+
+// 修改问卷
+export const updateQuestionService = async (
+	id: number,
+	option: { [key: string]: any }
+): Promise<ResponseType> => {
+	const url = `/api/question/${id}`
+	const data = (await axios.patch(url, option)) as ResponseType
+	return data
+}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Space, Divider, Tag, Popconfirm, message } from 'antd'
 import {
 	CopyOutlined,
@@ -9,6 +9,8 @@ import {
 } from '@ant-design/icons'
 import styles from './QuestionCard.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
+import { useRequest } from 'ahooks'
+import { updateQuestionService } from '../services/question'
 
 type PropsType = {
 	_id: number
@@ -22,6 +24,22 @@ type PropsType = {
 const QuestionCard: React.FC<PropsType> = props => {
 	const { _id, title, isPublished, isStar, answerCount, createdAt } = props
 	const navigate = useNavigate()
+
+	// 更新标星
+	const [isStarStatus, setIsStarStatus] = useState(isStar)
+	const { loading: changeStarLoading, run: changeStar } = useRequest(
+		async () => {
+			await updateQuestionService(_id, { isStar: !isStarStatus })
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				setIsStarStatus(!isStarStatus)
+				message.success('更新成功')
+			},
+		}
+	)
+
 	const duplicate = () => {
 		message.success('复制成功')
 	}
@@ -72,8 +90,14 @@ const QuestionCard: React.FC<PropsType> = props => {
 				</div>
 				<div className={styles.right}>
 					<Space>
-						<Button icon={<StarOutlined />} type="text" size="small">
-							{isStar ? '取消标星' : '标星'}
+						<Button
+							icon={<StarOutlined style={{ color: isStarStatus ? 'red' : '' }} />}
+							type="text"
+							size="small"
+							disabled={changeStarLoading}
+							onClick={changeStar}
+						>
+							{isStarStatus ? '取消标星' : '标星'}
 						</Button>
 						<Popconfirm
 							title="是否复制该问卷？"
