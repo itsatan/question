@@ -52,7 +52,7 @@ const QuestionCard: React.FC<PropsType> = props => {
 				<h3 className={styles.left}>
 					<Link to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}>
 						<Space>
-							{isStar && <StarOutlined style={{ color: 'red' }} />}
+							{isStarStatus && <StarOutlined style={{ color: 'red' }} />}
 							{title}
 						</Space>
 					</Link>
