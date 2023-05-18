@@ -1,4 +1,4 @@
-import { useTitle } from 'ahooks'
+import { useRequest, useTitle } from 'ahooks'
 import React, { useState } from 'react'
 import { Button, Empty, Modal, Space, Spin, Table, Tag, Typography, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
@@ -7,6 +7,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 import ListPage from '../../components/ListPage'
+import { deleteQuestionService, updateQuestionService } from '../../services/question'
 
 const { Title } = Typography
 
@@ -48,8 +49,20 @@ const columns: ColumnsType<DataType> = [
 const Trash: React.FC = () => {
 	useTitle('小慕问卷 - 回收站')
 	const [selectedIds, setSelectedIds] = useState<React.Key[]>([])
-	const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true })
+	const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true })
 	const { list = [], total = 0 } = data as any
+	// 彻底删除
+	const { run: deleteQuestion } = useRequest(
+		async () => await deleteQuestionService(selectedIds as string[]),
+		{
+			manual: true,
+			onSuccess: () => {
+				refresh()
+				setSelectedIds([])
+				message.success('删除成功')
+			},
+		}
+	)
 	const delQuestion = () => {
 		Modal.confirm({
 			title: '确认删除该问卷？',
@@ -57,16 +70,32 @@ const Trash: React.FC = () => {
 			content: '你正在执行彻底删除问卷操作，删除后，将无法恢复。 确认要删除吗？',
 			okText: '确认',
 			cancelText: '取消',
-			onOk: () => {
-				message.success('删除成功')
-			},
+			onOk: deleteQuestion,
 		})
 	}
+
+	// 恢复答卷
+	const { run: recover } = useRequest(
+		async () => {
+			for await (const id of selectedIds) {
+				await updateQuestionService(id as number, { isDeleted: false })
+			}
+		},
+		{
+			manual: true,
+			debounceWait: 500, // 防抖 防止重复点击
+			onSuccess: () => {
+				refresh()
+				setSelectedIds([])
+				message.success('恢复成功')
+			},
+		}
+	)
 
 	const TableElem = (
 		<>
 			<Space style={{ marginBottom: 15 }}>
-				<Button type="primary" disabled={!selectedIds.length}>
+				<Button type="primary" disabled={!selectedIds.length} onClick={recover}>
 					恢复答卷
 				</Button>
 				<Button danger disabled={!selectedIds.length} onClick={delQuestion}>
