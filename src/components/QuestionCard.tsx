@@ -10,7 +10,7 @@ import {
 import styles from './QuestionCard.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useRequest } from 'ahooks'
-import { updateQuestionService } from '../services/question'
+import { duplicateQuestionService, updateQuestionService } from '../services/question'
 
 type PropsType = {
 	_id: number
@@ -40,12 +40,39 @@ const QuestionCard: React.FC<PropsType> = props => {
 		}
 	)
 
-	const duplicate = () => {
-		message.success('复制成功')
-	}
-	const del = () => {
-		message.success('删除成功')
-	}
+	// 复制问卷
+	const { loading: duplicateLoading, run: duplicate } = useRequest(
+		async () => {
+			const data = await duplicateQuestionService(_id)
+			return data
+		},
+		{
+			manual: true,
+			onSuccess: (result: any) => {
+				navigate(`/question/edit/${result.id}`) // 跳转到问卷编辑页
+				message.success('复制成功')
+			},
+		}
+	)
+
+	// 删除（假删除 修改isDeleted）
+	const [deleteStatus, setDeleteStatus] = useState(false)
+	const { loading: delLoading, run: del } = useRequest(
+		async () => {
+			const data = await updateQuestionService(_id, { isDeleted: true })
+			return data
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				setDeleteStatus(true)
+				message.success('删除成功')
+			},
+		}
+	)
+
+	// 已经删除的问卷 不要再渲染卡片
+	if (deleteStatus) return null
 	return (
 		<div className={styles.container}>
 			<div className={styles.title}>
@@ -105,12 +132,12 @@ const QuestionCard: React.FC<PropsType> = props => {
 							okText="确定"
 							cancelText="取消"
 						>
-							<Button icon={<CopyOutlined />} type="text" size="small">
+							<Button icon={<CopyOutlined />} type="text" size="small" disabled={duplicateLoading}>
 								复制
 							</Button>
 						</Popconfirm>
 						<Popconfirm title="是否删除该问卷？" onConfirm={del} okText="确定" cancelText="取消">
-							<Button icon={<DeleteOutlined />} type="text" size="small">
+							<Button icon={<DeleteOutlined />} type="text" size="small" disabled={delLoading}>
 								删除
 							</Button>
 						</Popconfirm>
