@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
 import styles from './Login.module.scss'
-import { Space, Typography, Button, Form, Input, Checkbox } from 'antd'
+import { Space, Typography, Button, Form, Input, Checkbox, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
-import { REGISTER_PATHNAME } from '../router'
+import { Link, useNavigate } from 'react-router-dom'
+import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from '../router'
+import { useRequest } from 'ahooks'
+import { loginService } from '../services/user'
+import { setToken } from '../utils/user-token'
 
 const { Title } = Typography
 
@@ -35,18 +38,34 @@ const getUserFromStorage = () => {
 
 const Login: React.FC = () => {
 	const [form] = Form.useForm()
+	const navigate = useNavigate()
 	useEffect(() => {
 		const { username, password } = getUserFromStorage()
 		form.setFieldsValue({ username, password })
 	}, [])
+	const { run: handleLogin } = useRequest(
+		async (username: string, password: string) => {
+			const data = await loginService(username, password)
+			return data
+		},
+		{
+			manual: true,
+			onSuccess: (result: any) => {
+				const { token = '' } = result
+				setToken(token)
+				message.success('登录成功')
+				navigate(MANAGE_INDEX_PATHNAME) // 跳转到我的问卷
+			},
+		}
+	)
 	const onFinish = (params: LoginProps) => {
 		const { username, password, remember } = params
+		handleLogin(username, password)
 		if (remember) {
 			rememberUser(username, password)
 		} else {
 			deleteUserFromStorage()
 		}
-		console.log(params)
 	}
 	return (
 		<div className={styles.container}>

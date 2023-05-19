@@ -1,9 +1,11 @@
 import React from 'react'
-import { Space, Typography, Button, Form, Input } from 'antd'
+import { Space, Typography, Button, Form, Input, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import styles from './Register.module.scss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { LOGIN_PATHNAME } from '../router'
+import { useRequest } from 'ahooks'
+import { registerService } from '../services/user'
 
 const { Title } = Typography
 
@@ -15,9 +17,22 @@ interface RegisterProps {
 }
 
 const Register: React.FC = () => {
-	const onFinish = (params: RegisterProps) => {
-		console.log('提交', params)
-	}
+	const navigate = useNavigate()
+	const { run: handleRegister } = useRequest(
+		async params => {
+			const { username, password, nickname } = params
+			const data = await registerService(username, password, nickname)
+			return data
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('注册成功')
+				navigate(LOGIN_PATHNAME)
+			},
+		}
+	)
+	const onFinish = (params: RegisterProps) => handleRegister(params)
 	return (
 		<div className={styles.container}>
 			<Space>
