@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import countReducer from './count'
+import userReducer, { UserStateType } from './user'
 
 export type StateType = {
-	count: number
+	user: UserStateType
 }
 
 // configure 安装 store 仓库
 export default configureStore({
 	reducer: {
-		count: countReducer,
+		user: userReducer,
 	},
 })

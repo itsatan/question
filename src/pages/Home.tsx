@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { Typography, Button } from 'antd'
 import { MANAGE_INDEX_PATHNAME } from '../router'
 import styles from './Home.module.scss'
-import Count from './Count'
 
 const { Title, Paragraph } = Typography
 
@@ -18,7 +17,6 @@ const Home: React.FC = () => {
 					开始使用
 				</Button>
 			</div>
-			<Count />
 		</div>
 	)
 }
