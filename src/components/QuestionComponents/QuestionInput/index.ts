@@ -4,6 +4,7 @@ import { QuestionInputDefaultProps } from './interface'
 
 export * from './interface'
 
+// Input 组件配置
 export default {
 	title: '输入框',
 	type: 'questionInput', // 要和后端统一好

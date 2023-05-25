@@ -22,8 +22,12 @@ const useLoadQuestionData = () => {
 	useEffect(() => {
 		if (!data) return
 		const { title = '', componentList = [] } = data as any
-		// 存储componentList
-		dispatch(resetComponents(componentList))
+		// 获取默认selectedId
+		let selectedId = ''
+		if (componentList.length) {
+			selectedId = componentList[0].fe_id
+		}
+		dispatch(resetComponents({ componentList, selectedId }))
 	}, [data])
 	// 根据id变化 发起请求
 	useEffect(() => {

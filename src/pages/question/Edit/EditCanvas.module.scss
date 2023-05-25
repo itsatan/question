@@ -18,3 +18,8 @@
 .component {
     pointer-events: none; // 屏蔽鼠标行为
 }
+
+.selected {
+    // important 防止被其他元素影响
+    border-color: #1890ff !important;
+}
