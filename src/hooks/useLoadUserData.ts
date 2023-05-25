@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from '../store'
-import { UserStateType, loginReducer } from '../store/user'
+import { UserStateType, loginReducer } from '../store/userReducer'
 import { useRequest } from 'ahooks'
 import { getUserInfoService } from '../services/user'
 
