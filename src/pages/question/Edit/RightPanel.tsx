@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import { FileTextOutlined, SettingOutlined } from '@ant-design/icons'
+import ComponentProp from './ComponentProp'
 
 const RightPanel: React.FC = () => {
 	const tabsItems = [
@@ -13,7 +14,7 @@ const RightPanel: React.FC = () => {
 					属性
 				</span>
 			),
-			children: <div>属性BODY</div>,
+			children: <ComponentProp />,
 		},
 		// 页面设置
 		{

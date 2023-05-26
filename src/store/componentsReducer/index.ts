@@ -55,9 +55,27 @@ const componentsReducer = createSlice({
 				draft.selectedId = newComponent.fe_id
 			}
 		),
+		// 修改组件属性
+		changeComponentProps: produce(
+			(
+				draft: ComponentsStateType,
+				action: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
+			) => {
+				const { fe_id, newProps } = action.payload
+				// 找到当前要修改的组件
+				const currentComponent = draft.componentList.find(c => c.fe_id === fe_id)
+				if (currentComponent) {
+					currentComponent.props = {
+						...currentComponent.props,
+						...newProps, // 传入参数覆盖之前的props
+					}
+				}
+			}
+		),
 	},
 })
 
-export const { resetComponents, changeSelectedId, addComponent } = componentsReducer.actions
+export const { resetComponents, changeSelectedId, addComponent, changeComponentProps } =
+	componentsReducer.actions
 
 export default componentsReducer.reducer
