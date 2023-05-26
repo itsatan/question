@@ -1,0 +1,16 @@
+.wrapper {
+    cursor: pointer;
+    margin-bottom: 12px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    padding: 12px;
+    border-radius: 4px;
+
+    &:hover {
+        border-color: #d9d9d9;
+    }
+}
+
+.component {
+    pointer-events: none; // 屏蔽鼠标行为
+}
