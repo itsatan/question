@@ -12,7 +12,7 @@ const ComponentProp: React.FC = () => {
 	const { selectedComponent } = useGetComponentInfo()
 	const dispatch = useDispatch()
 	if (selectedComponent === undefined) return <NoProp />
-	const { type, props } = selectedComponent
+	const { type, props, isLocked, isHidden } = selectedComponent
 	// 根据type生成组件配置
 	const componentConf = getComponentConfByType(type)
 	if (componentConf === undefined) return <NoProp />
@@ -27,7 +27,7 @@ const ComponentProp: React.FC = () => {
 
 	// 解构出属性组件
 	const { PropComponent } = componentConf
-	return <PropComponent {...props} onChange={changeProps} />
+	return <PropComponent {...props} onChange={changeProps} disabled={isLocked || isHidden} />
 }
 
 export default ComponentProp

@@ -8,6 +8,7 @@ export type ComponentInfoType = {
 	type: string
 	title: string
 	isHidden?: boolean
+	isLocked?: boolean
 	props: ComponentPropsType
 }
 
@@ -110,6 +111,18 @@ const componentsReducer = createSlice({
 				}
 			}
 		),
+		// 锁定/解锁  选中的组件
+		toggleComponentLocked: produce(
+			(draft: ComponentsStateType, action: PayloadAction<{ fe_id: string }>) => {
+				const { componentList } = draft
+				const { fe_id } = action.payload
+				// 获取当前要操作的组件
+				const currentComponent = componentList.find(c => c.fe_id === fe_id)
+				if (currentComponent) {
+					currentComponent.isLocked = !currentComponent.isLocked
+				}
+			}
+		),
 	},
 })
 
@@ -120,6 +133,7 @@ export const {
 	changeComponentProps,
 	removeSelectedComponent,
 	changeComponentHidden,
+	toggleComponentLocked,
 } = componentsReducer.actions
 
 export default componentsReducer.reducer

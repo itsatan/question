@@ -20,8 +20,12 @@ const QuestionTitle: React.FC<QuestionTitlePropsType> = (props: QuestionTitlePro
 				return '20px'
 			case 3:
 				return '16px'
+			case 4:
+				return '14px'
+			case 5:
+				return '12px'
 			default:
-				return '16px'
+				return '12px'
 		}
 	}
 

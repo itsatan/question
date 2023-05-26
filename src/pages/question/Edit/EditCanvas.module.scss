@@ -23,3 +23,8 @@
     // important 防止被其他元素影响
     border-color: #1890ff !important;
 }
+
+.locked {
+    opacity: .5;
+    cursor: not-allowed;
+}
