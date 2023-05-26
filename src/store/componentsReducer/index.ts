@@ -7,6 +7,7 @@ export type ComponentInfoType = {
 	fe_id: string
 	type: string
 	title: string
+	isHidden?: boolean
 	props: ComponentPropsType
 }
 
@@ -85,6 +86,30 @@ const componentsReducer = createSlice({
 			const index = componentList.findIndex(c => c.fe_id === deleteId)
 			componentList.splice(index, 1)
 		}),
+		// 隐藏/显示  选中的组件
+		changeComponentHidden: produce(
+			(draft: ComponentsStateType, action: PayloadAction<{ fe_id: string; isHidden: boolean }>) => {
+				const { componentList = [] } = draft
+				const { fe_id, isHidden } = action.payload
+
+				// 重新计算selectedId
+				let newSelectedId = ''
+				if (isHidden) {
+					// 如果是隐藏
+					newSelectedId = getNextSelectedId(fe_id, componentList)
+				} else {
+					// 如果是显示
+					newSelectedId = fe_id
+				}
+				draft.selectedId = newSelectedId
+
+				// 获取当前要操作的组件
+				const currentComponent = componentList.find(c => c.fe_id === fe_id)
+				if (currentComponent) {
+					currentComponent.isHidden = isHidden
+				}
+			}
+		),
 	},
 })
 
@@ -94,6 +119,7 @@ export const {
 	addComponent,
 	changeComponentProps,
 	removeSelectedComponent,
+	changeComponentHidden,
 } = componentsReducer.actions
 
 export default componentsReducer.reducer
