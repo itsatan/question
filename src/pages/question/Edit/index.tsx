@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { changeSelectedId } from '../../../store/componentsReducer'
 import LeftPanel from './LeftPanel'
 import RightPanel from './RightPanel'
+import EditHeader from './EditHeader'
 
 const Edit: React.FC = () => {
 	const { loading } = useLoadQuestionData()
@@ -17,7 +18,7 @@ const Edit: React.FC = () => {
 	}
 	return (
 		<div className={styles.container}>
-			<div>Header</div>
+			<EditHeader />
 			<div className={styles['container-wrapper']}>
 				<div className={styles.content}>
 					<div className={styles.left}>
