@@ -21,26 +21,34 @@ const EditToolbar: React.FC = () => {
 	const dispatch = useDispatch()
 	const { selectedId, selectedComponent, copiedComponent } = useGetComponentInfo()
 	const { isLocked } = selectedComponent || {}
+
 	// 删除选中的组件
 	const handleDelete = () => {
 		dispatch(removeSelectedComponent())
 	}
+
 	// 隐藏/显示  选中的组件
 	const handleHidden = () => {
 		dispatch(changeComponentHidden({ fe_id: selectedId, isHidden: true }))
 	}
+
 	// 锁定/解锁  选中的组件
 	const handleLock = () => {
 		dispatch(toggleComponentLocked({ fe_id: selectedId }))
 	}
+
 	// 复制组件
 	const handleCopy = () => {
 		dispatch(copySelectedComponent())
 	}
+
 	// 粘贴组件
 	const handlePaste = () => {
 		dispatch(pasteCopiedComponent())
 	}
+
+	// TODO 上移 下移 撤销 重做
+
 	return (
 		<Space>
 			<Tooltip title="删除">

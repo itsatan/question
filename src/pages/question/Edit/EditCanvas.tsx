@@ -8,6 +8,7 @@ import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 import { ComponentInfoType, changeSelectedId } from '../../../store/componentsReducer'
 import { ComponentConfType, getComponentConfByType } from '../../../components/QuestionComponents'
 import { useDispatch } from 'react-redux'
+import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress'
 
 type EditCanvasPropsType = {
 	loading: boolean
@@ -30,6 +31,10 @@ const EditCanvas: React.FC<EditCanvasPropsType> = ({ loading }) => {
 		event.stopPropagation() // 阻止冒泡
 		dispatch(changeSelectedId(id))
 	}
+
+	// 绑定快捷键
+	useBindCanvasKeyPress()
+
 	if (loading) {
 		return (
 			<div style={{ textAlign: 'center', marginTop: 50 }}>

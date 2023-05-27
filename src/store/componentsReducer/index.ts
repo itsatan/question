@@ -134,6 +134,20 @@ const componentsReducer = createSlice({
 			// 抽离的插入组件函数
 			insertNewComponent(draft, copiedComponent)
 		}),
+		// 选中上一个
+		selectPrevComponent: produce((draft: ComponentsStateType) => {
+			const { selectedId, componentList } = draft
+			const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+			if (selectedIndex <= 0) return //未选中组件 或 已经选中了第一个 无法在向上选中
+			draft.selectedId = componentList[selectedIndex - 1].fe_id
+		}),
+		// 选中下一个
+		selectNextComponent: produce((draft: ComponentsStateType) => {
+			const { selectedId, componentList } = draft
+			const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+			if (selectedIndex < 0 || selectedIndex + 1 === componentList.length) return // 未选中组件 或 已经选中了最后一个 无法在向下选中
+			draft.selectedId = componentList[selectedIndex + 1].fe_id
+		}),
 	},
 })
 
@@ -147,6 +161,8 @@ export const {
 	toggleComponentLocked,
 	copySelectedComponent,
 	pasteCopiedComponent,
+	selectPrevComponent,
+	selectNextComponent,
 } = componentsReducer.actions
 
 export default componentsReducer.reducer
