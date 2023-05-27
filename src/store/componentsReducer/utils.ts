@@ -1,4 +1,4 @@
-import { ComponentInfoType } from '.'
+import { ComponentInfoType, ComponentsStateType } from '.'
 
 /**
  * 获取下一个selectedId
@@ -32,4 +32,25 @@ export const getNextSelectedId = (fe_id: string, componentList: Array<ComponentI
 		}
 	}
 	return newSelectedId
+}
+
+/**
+ * 插入新组件
+ * @param draft draft state
+ * @param newComponent 要插入的新组件
+ */
+export const insertNewComponent = (draft: ComponentsStateType, newComponent: ComponentInfoType) => {
+	const { selectedId, componentList } = draft
+	const index = componentList.findIndex(c => c.fe_id === selectedId)
+
+	if (index < 0) {
+		// 未选中任何组件
+		draft.componentList.push(newComponent)
+	} else {
+		// 选中了组件 插入到组件（index）的后面
+		draft.componentList.splice(index + 1, 0, newComponent)
+	}
+
+	// 更新selectedId
+	draft.selectedId = newComponent.fe_id
 }
