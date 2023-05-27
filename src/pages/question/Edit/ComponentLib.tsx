@@ -41,8 +41,8 @@ const ComponentLib: React.FC = () => {
 					<div key={groupId}>
 						<Title level={5} style={{ marginTop: index > 0 ? 20 : 0 }}>
 							{groupName}
-							{components.map(c => genComponent(c))}
 						</Title>
+						{components.map(c => genComponent(c))}
 					</div>
 				)
 			})}

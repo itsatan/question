@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Form, Input } from 'antd'
 import { QuestionInputPropsType } from './interface'
 
-const InputPropComponents: React.FC<QuestionInputPropsType> = (props: QuestionInputPropsType) => {
+const InputPropComponent: React.FC<QuestionInputPropsType> = (props: QuestionInputPropsType) => {
 	const { title, placeholder, onChange, disabled } = props
 	const [form] = Form.useForm()
 
@@ -34,4 +34,4 @@ const InputPropComponents: React.FC<QuestionInputPropsType> = (props: QuestionIn
 	)
 }
 
-export default InputPropComponents
+export default InputPropComponent

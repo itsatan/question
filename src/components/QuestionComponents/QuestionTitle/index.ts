@@ -1,3 +1,8 @@
+/**
+ * @description 问卷 - 标题
+ * @author ITSATAN
+ */
+
 import Component from './Component'
 import PropComponent from './PropComponent'
 import { QuestionTitleDefaultProps } from './interface'
