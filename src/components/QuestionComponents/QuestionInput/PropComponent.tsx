@@ -24,7 +24,11 @@ const InputPropComponent: React.FC<QuestionInputPropsType> = (props: QuestionInp
 			onValuesChange={handleValuesChange}
 			disabled={disabled}
 		>
-			<Form.Item label="标题" name="title" rules={[{ required: true, message: '请输入标题' }]}>
+			<Form.Item
+				label="标题内容"
+				name="title"
+				rules={[{ required: true, message: '请输入标题内容' }]}
+			>
 				<Input />
 			</Form.Item>
 			<Form.Item label="Placeholder" name="placeholder">
