@@ -148,6 +148,16 @@ const componentsReducer = createSlice({
 			if (selectedIndex < 0 || selectedIndex + 1 === componentList.length) return // 未选中组件 或 已经选中了最后一个 无法在向下选中
 			draft.selectedId = componentList[selectedIndex + 1].fe_id
 		}),
+		// 修改组件标题
+		changeComponentTitle: produce(
+			(draft: ComponentsStateType, action: PayloadAction<{ fe_id: string; title: string }>) => {
+				const { componentList } = draft
+				const { fe_id, title } = action.payload
+				const currentComponent = componentList.find(c => c.fe_id === fe_id)
+				if (currentComponent === undefined) return
+				currentComponent.title = title
+			}
+		),
 	},
 })
 
@@ -163,6 +173,7 @@ export const {
 	pasteCopiedComponent,
 	selectPrevComponent,
 	selectNextComponent,
+	changeComponentTitle,
 } = componentsReducer.actions
 
 export default componentsReducer.reducer
