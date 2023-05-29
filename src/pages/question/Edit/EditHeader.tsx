@@ -1,17 +1,20 @@
-import React, { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import styles from './EditHeader.module.scss'
 import { Button, Input, InputRef, Space, Typography } from 'antd'
 import { EditOutlined, LeftOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import EditToolbar from './EditToolbar'
 import useGetPageInfo from '../../../hooks/useGetPageInfo'
 import { useDispatch } from 'react-redux'
 import { changePageTitle } from '../../../store/pageInfoReducer'
+import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
+import { useDebounceEffect, useKeyPress, useRequest } from 'ahooks'
+import { updateQuestionService } from '../../../services/question'
 
 const { Title } = Typography
 
 // 显示和修改标题
-const TitleElem = () => {
+const TitleElem: React.FC = () => {
 	const { title } = useGetPageInfo()
 	const inputRef = useRef<InputRef>(null)
 	const dispatch = useDispatch()
@@ -44,6 +47,43 @@ const TitleElem = () => {
 	)
 }
 
+// 保存和自动保存
+const SaveButton: React.FC = () => {
+	const { id } = useParams()
+	const pageInfo = useGetPageInfo()
+	const { componentList = [] } = useGetComponentInfo()
+
+	const { loading, run: save } = useRequest(
+		async () => {
+			if (!id) return
+			await updateQuestionService(+id, { ...pageInfo, componentList })
+		},
+		{ manual: true }
+	)
+
+	// 快捷键保存
+	useKeyPress(['ctrl.s', 'meta.s'], (event: KeyboardEvent) => {
+		// 禁用默认行为（网页保存）
+		event.preventDefault()
+		if (!loading) save()
+	})
+
+	// 防抖-自动保存（不是定时器）
+	useDebounceEffect(
+		() => {
+			save()
+		},
+		[pageInfo, componentList],
+		{ wait: 1000 } // 1000毫秒
+	)
+
+	return (
+		<Button loading={loading} disabled={loading} onClick={save}>
+			保存
+		</Button>
+	)
+}
+
 const EditHeader: React.FC = () => {
 	const navigate = useNavigate()
 	return (
@@ -62,7 +102,7 @@ const EditHeader: React.FC = () => {
 				</div>
 				<div className={styles.right}>
 					<Space>
-						<Button>保存</Button>
+						<SaveButton />
 						<Button type="primary">发布</Button>
 					</Space>
 				</div>
