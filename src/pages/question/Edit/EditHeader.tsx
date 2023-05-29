@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useRef, useState } from 'react'
 import styles from './EditHeader.module.scss'
-import { Button, Input, InputRef, Space, Typography } from 'antd'
+import { Button, Input, InputRef, Space, Typography, message } from 'antd'
 import { EditOutlined, LeftOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import EditToolbar from './EditToolbar'
@@ -84,6 +84,37 @@ const SaveButton: React.FC = () => {
 	)
 }
 
+// 发布按钮
+const PublishButton: React.FC = () => {
+	const { id } = useParams()
+	const navigate = useNavigate()
+	const pageInfo = useGetPageInfo()
+	const { componentList = [] } = useGetComponentInfo()
+
+	const { loading, run: pub } = useRequest(
+		async () => {
+			if (!id) return
+			await updateQuestionService(+id, {
+				...pageInfo,
+				componentList,
+				isPublished: true, // 标志问卷已发布
+			})
+		},
+		{
+			manual: true,
+			onSuccess: () => {
+				message.success('发布成功')
+				navigate(`/question/stat/${id}`) // 跳转统计页面
+			},
+		}
+	)
+	return (
+		<Button type="primary" onClick={pub} loading={loading} disabled={loading}>
+			发布
+		</Button>
+	)
+}
+
 const EditHeader: React.FC = () => {
 	const navigate = useNavigate()
 	return (
@@ -103,7 +134,7 @@ const EditHeader: React.FC = () => {
 				<div className={styles.right}>
 					<Space>
 						<SaveButton />
-						<Button type="primary">发布</Button>
+						<PublishButton />
 					</Space>
 				</div>
 			</div>
