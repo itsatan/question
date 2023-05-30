@@ -1,0 +1,4 @@
+/* 解决 dnd-kit 拖拽排序 轮廓线问题*/
+div[role='button'] {
+    outline: 0;
+}

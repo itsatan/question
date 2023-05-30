@@ -13,7 +13,12 @@ import {
  */
 const isActiveElementValid = () => {
 	const activeElem = document.activeElement
+	// dnd-kit 之前
+	// if (activeElem === document.body) return true
+	// dnd-kit 之后
 	if (activeElem === document.body) return true
+	// 如果元素被指定的选择器字符串选择，Element.matches() 方法返回 true; 否则返回 false。
+	if (activeElem?.matches('div[role="button"]')) return true
 	return false
 }
 
