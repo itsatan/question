@@ -2,8 +2,10 @@ import React from 'react'
 import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
 import styles from './index.module.scss'
 import EditCanvas from './EditCanvas'
+import { useTitle } from 'ahooks'
 import { useDispatch } from 'react-redux'
 import { changeSelectedId } from '../../../store/componentsReducer'
+import useGetPageInfo from '../../../hooks/useGetPageInfo'
 import LeftPanel from './LeftPanel'
 import RightPanel from './RightPanel'
 import EditHeader from './EditHeader'
@@ -11,11 +13,13 @@ import EditHeader from './EditHeader'
 const Edit: React.FC = () => {
 	const { loading } = useLoadQuestionData()
 	const dispatch = useDispatch()
-	// return <>{loading ? <p>loading...</p> : <div>Edit:{JSON.stringify(data)}</div>}</>
+	const { title } = useGetPageInfo()
 	// 点击画布灰色区域 清空选中框
 	const clearSelectedId = () => {
 		dispatch(changeSelectedId(''))
 	}
+	// 修改页面标题
+	useTitle(`问卷编辑 - ${title}`)
 	return (
 		<div className={styles.container}>
 			<EditHeader />

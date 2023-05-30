@@ -22,7 +22,14 @@ const useLoadQuestionData = () => {
 	// 根据获取的 data 设置 redux store
 	useEffect(() => {
 		if (!data) return
-		const { title = '', desc = '', css = '', js = '', componentList = [] } = data as any
+		const {
+			title = '',
+			desc = '',
+			css = '',
+			js = '',
+			isPublished = false,
+			componentList = [],
+		} = data as any
 		// 获取默认selectedId
 		let selectedId = ''
 		if (componentList.length) {
@@ -31,7 +38,7 @@ const useLoadQuestionData = () => {
 		// 设置 components redux
 		dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }))
 		// 设置 pageInfo redux
-		dispatch(resetPageInfo({ title, desc, css, js }))
+		dispatch(resetPageInfo({ title, desc, css, js, isPublished }))
 	}, [data])
 	// 根据id变化 发起请求
 	useEffect(() => {
