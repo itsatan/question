@@ -61,8 +61,8 @@ const Layers: React.FC = () => {
 
 	// 具有id的组件列表
 	const componentListWithId = componentList.map(c => ({ ...c, id: c.fe_id }))
+	// 拖拽排序结束
 	const handleDragEnd = (oldIndex: number, newIndex: number) => {
-		// console.log('handleDragEnd', oldIndex, newIndex)
 		dispatch(moveComponent({ oldIndex, newIndex }))
 	}
 	return (
