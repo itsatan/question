@@ -14,7 +14,6 @@ const INIT_STATE: PageInfoType = {
 	desc: '',
 	css: '',
 	js: '',
-	isPublished: false,
 }
 
 const pageInfoSlice = createSlice({

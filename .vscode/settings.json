@@ -7,6 +7,7 @@
         "clonedeep",
         "downarrow",
         "immer",
+        "Qrcode",
         "reduxjs",
         "undoable",
         "uparrow"
