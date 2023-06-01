@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTitle } from 'ahooks'
 import { Button, Result, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import useGetPageInfo from '../../../hooks/useGetPageInfo'
 import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
-
-import styles from './index.module.scss'
 import StatHeader from './StatHeader'
+import ComponentList from './ComponentList'
+import styles from './index.module.scss'
+import PageStat from './PageStat'
 
 const Stat: React.FC = () => {
 	const { loading } = useLoadQuestionData()
@@ -14,6 +15,9 @@ const Stat: React.FC = () => {
 	const navigate = useNavigate()
 	// 修改页面标题
 	useTitle(`问卷统计 - ${title}`)
+
+	const [selectedComponentId, setSelectedComponentId] = useState('')
+	const [selectedComponentType, setSelectedComponentType] = useState('')
 
 	// Loading Elem
 	const LoadingElem = (
@@ -38,8 +42,16 @@ const Stat: React.FC = () => {
 		}
 		return (
 			<>
-				<div className={styles.left}>Left</div>
-				<div className={styles.main}>Main</div>
+				<div className={styles.left}>
+					<ComponentList
+						{...{ selectedComponentId, setSelectedComponentId, setSelectedComponentType }}
+					/>
+				</div>
+				<div className={styles.main}>
+					<PageStat
+						{...{ selectedComponentId, setSelectedComponentId, setSelectedComponentType }}
+					/>
+				</div>
 				<div className={styles.right}>Right</div>
 			</>
 		)
