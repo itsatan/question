@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Typography, Spin, Table } from 'antd'
+import { Typography, Spin, Table, Pagination } from 'antd'
 import { useRequest } from 'ahooks'
 import { getStatListService } from '../../../services/stat'
 import { useParams } from 'react-router-dom'
 import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
+import { STAT_PAGE_SIZE } from '../../../constants'
 
 const { Title } = Typography
 
@@ -18,14 +19,18 @@ const PageStat: React.FC<PropsType> = props => {
 	const { componentList } = useGetComponentInfo()
 	const { id = '' } = useParams()
 	const [list, setList] = useState([])
+	const [page, setPage] = useState(1)
+	const [pageSize, setPageSize] = useState(STAT_PAGE_SIZE)
 	const [total, setTotal] = useState(0)
 
 	const { loading } = useRequest(
 		async () => {
-			const data = await getStatListService(id, { page: 1, pageSize: 10 })
+			const data = await getStatListService(id, { page, pageSize })
 			return data
 		},
 		{
+			// 依赖项变化触发重新请求
+			refreshDeps: [id, page, pageSize],
 			onSuccess: response => {
 				const { list = [], total = 0 } = response
 				setList(list)
@@ -57,7 +62,21 @@ const PageStat: React.FC<PropsType> = props => {
 	})
 
 	const TableElem = (
-		<Table rowKey={(c: any) => c._id} columns={columns} dataSource={list} pagination={false} />
+		<>
+			<Table rowKey={(c: any) => c._id} columns={columns} dataSource={list} pagination={false} />
+			<div style={{ textAlign: 'center', marginTop: 18 }}>
+				<Pagination
+					total={total}
+					current={page}
+					pageSize={pageSize}
+					onChange={page => setPage(page)}
+					onShowSizeChange={(page, pageSize) => {
+						setPage(page)
+						setPageSize(pageSize)
+					}}
+				/>
+			</div>
+		</>
 	)
 	return (
 		<div>

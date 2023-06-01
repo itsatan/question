@@ -8,6 +8,7 @@ import StatHeader from './StatHeader'
 import ComponentList from './ComponentList'
 import styles from './index.module.scss'
 import PageStat from './PageStat'
+import ChartStat from './ChartStat'
 
 const Stat: React.FC = () => {
 	const { loading } = useLoadQuestionData()
@@ -52,7 +53,9 @@ const Stat: React.FC = () => {
 						{...{ selectedComponentId, setSelectedComponentId, setSelectedComponentType }}
 					/>
 				</div>
-				<div className={styles.right}>Right</div>
+				<div className={styles.right}>
+					<ChartStat {...{ selectedComponentId, selectedComponentType }} />
+				</div>
 			</>
 		)
 	}
